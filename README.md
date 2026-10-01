@@ -2,7 +2,7 @@
 
 BMatic’s small landing page and durable short-link domain. The full brand/catalog site lives at **https://bmatic.xyz/**. This companion is for social profiles, QR codes, packaging, and printed objects.
 
-**One YAML file → homepage cards + HTTP short links.** No browser JavaScript, backend, database, tracking, or application framework. Python and one pinned build dependency (PyYAML) generate deployable static files for Cloudflare Pages.
+**One YAML file → homepage cards + HTTP short links.** Only a small optional theme script; no backend, database, tracking, or application framework. Python and one pinned build dependency (PyYAML) generate deployable static files for Cloudflare Pages.
 
 ## Architecture
 
@@ -142,3 +142,11 @@ node scripts/browser_check.cjs
 ```
 
 This checks the landing page and branded 404 with JavaScript disabled at 320, 390, 768 and 1440 px, plus keyboard focus, skip link, image loading, and overflow. Test output goes to ignored `.tools/`. See `docs/verification.md` and the saved previews for the completed verification record.
+
+## Light and dark themes
+
+Use the **Dark mode** button in the header to switch themes. Its pressed state indicates dark mode. Initially the site follows the system color preference; a manual choice is saved in localStorage for this site and survives navigation/reloads. Each domain stores its preference independently. Until a manual choice is made, system changes are followed live. Clearing the `bmatic-theme` localStorage key restores system-following behavior.
+
+The small `assets/theme.js` script applies the preference before rendering and handles the accessible toggle. Without JavaScript, the button stays hidden and CSS follows the system preference; content, links and redirects still work. Blocked browser storage does not prevent switching the current page. The supplied brand artwork and gold-button contrast are preserved in both themes.
+
+With the preview running and the optional Playwright dependency installed as above, run `node scripts/theme_check.cjs` to verify both themes, keyboard control, persistence, system preference changes, no-JavaScript fallback and blocked storage.

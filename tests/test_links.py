@@ -20,9 +20,7 @@ def entry(**values):
 class LinkTests(unittest.TestCase):
     def test_initial_configuration(self):
         links = load_links()
-        self.assertEqual([x['slug'] for x in links if x['enabled']], ['designs', 'main'])
-        self.assertEqual([x['slug'] for x in links if not x['enabled']], ['shop', 'print', 'instagram'])
-        self.assertEqual(cards_html(links).count('class="destination"'), 1)
+        self.assertEqual(cards_html(links).count('class="destination"'), sum(x['enabled'] and x['homepage'] for x in links))
 
     def test_slug_validation_and_reserved_paths(self):
         for slug in ['/print', 'Print', 'my link', '?foo', '#test', '', '-', 'a--b', '../a', 'a' * 65, 'favicon.ico', 'robots.txt', *RESERVED]:
@@ -96,7 +94,7 @@ class BuildTests(unittest.TestCase):
         rules = read_redirects(self.output)
         self.assertEqual(set(rules), {'/test-link', '/test-link/'})
         self.assertEqual(rules['/test-link'], ('https://example.com/path?x=1&y=2', 302))
-        self.assertNotIn('/off', (self.output / 'index.html').read_text())
+        self.assertNotIn('/off', (self.output / 'index.html').read_text(encoding='utf-8'))
         self.write([])
         build(self.output, self.data)
         self.assertEqual(read_redirects(self.output), {})
@@ -111,7 +109,9 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(previous, (self.output / '_redirects').read_bytes())
 
     def test_http_landing_redirects_and_404(self):
-        build(self.output)
+        # Keep HTTP behavior independent of the owner's current link inventory.
+        self.write([dict(entry(), slug=slug, destination='https://bmatic.xyz/', enabled=slug in ('designs', 'main')) for slug in ('designs', 'main', 'shop', 'print', 'instagram')])
+        build(self.output, self.data)
         server = make_server(self.output, 0)
         thread = Thread(target=server.serve_forever, daemon=True)
         thread.start()
@@ -131,7 +131,7 @@ class BuildTests(unittest.TestCase):
                         self.assertNotIn('Location', response.headers)
                     elif route == '/':
                         self.assertIn('Dream. Design. Discover.', body)
-                        self.assertNotIn('<script', body)
+                        self.assertIn('<script src="/assets/theme.js"></script>', body)
                     client.close()
         finally:
             server.shutdown()

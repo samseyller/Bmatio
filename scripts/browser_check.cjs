@@ -23,7 +23,7 @@ fs.mkdirSync(output, {recursive: true});
         assert(state.scroll <= state.width, `${name} at ${width}: horizontal overflow`);
         assert.deepEqual(state.broken, []);
         assert.deepEqual(state.small, [], 'Comfortable 44px touch targets');
-        assert.equal(state.scripts, 0);
+        assert.equal(state.scripts, 1);
         await page.screenshot({path:path.join(output,`${name}-${width}.png`),fullPage:true});
         console.log(`PASS ${name} ${width}px: status ${status}, no overflow, images loaded, 44px links, JS disabled`);
       }

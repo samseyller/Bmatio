@@ -13,7 +13,7 @@ class Page(HTMLParser):
         super().__init__()
         self.ids, self.refs, self.cards, self.errors = [], [], [], []
         self.meta, self.canonical, self.title = {}, None, ''
-        self.in_title, self.h1, self.scripts = False, 0, 0
+        self.in_title, self.h1, self.scripts = False, 0, []
         self.feed(source)
 
     def handle_starttag(self, tag, pairs):
@@ -23,7 +23,7 @@ class Page(HTMLParser):
         if tag == 'h1':
             self.h1 += 1
         if tag == 'script':
-            self.scripts += 1
+            self.scripts.append(attrs.get('src'))
         if tag == 'title':
             self.in_title = True
         if tag == 'meta':
@@ -64,7 +64,7 @@ def check():
         source = (output / name).read_text(encoding='utf-8')
         page = Page(source)
         errors.extend(f'{name}: {x}' for x in page.errors)
-        if not page.title or page.h1 != 1 or page.canonical != canonical or page.scripts:
+        if not page.title or page.h1 != 1 or page.canonical != canonical or page.scripts != ['/assets/theme.js']:
             errors.append(f'{name}: title, heading, canonical, or script check failed')
         for field in ('description', 'og:title', 'og:description', 'og:url', 'og:image', 'og:image:alt'):
             if not page.meta.get(field):

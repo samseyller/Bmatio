@@ -27,3 +27,7 @@ Cloudflare documentation was checked for [redirect syntax and limits](https://de
 ## Workspace safety
 
 `Bmatio` was initially empty and is not a Git repository. No governing AGENTS.md files were found. All writes stayed in Bmatio. The adjacent BMatic repository’s original untracked-file status was preserved; SeyllerApps remained clean. The official primary bee images and favicon were copied read-only from BMatic. Generated `dist/` is the intentional deploy-ready artifact and is ignored by the supplied `.gitignore`; browser/test tooling and scratch output are excluded from deployment.
+
+## Dark-mode update — October 1, 2026
+
+Added a shared-header Dark mode toggle with pressed-state semantics, saved per-origin preference, pre-render initialization and system-theme defaults. Official artwork and gold-button text contrast remain unchanged. Theme browser checks passed at 320, 390 and 1440 px for home/supporting pages, including keyboard activation, reload/navigation persistence, cross-tab synchronization, live system changes, blocked storage and CSS fallback with JavaScript disabled. Both site builds and generated-page validators passed. Bmatio’s 12 link tests passed; fixtures now avoid assumptions about the owner’s enabled shop/Printables links.
