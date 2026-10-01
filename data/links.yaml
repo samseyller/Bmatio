@@ -1,0 +1,45 @@
+# The only source of truth for homepage cards and short-link destinations.
+# Unknown destinations stay disabled until configured. Never use fake URLs.
+links:
+  - slug: designs
+    label: Browse Designs
+    destination: https://bmatic.xyz/
+    description: Explore the world of BMatic 3D designs.
+    icon: cube
+    enabled: true
+    homepage: true
+    order: 10
+
+  - slug: shop
+    label: Buy Printed Products
+    destination: https://teleportpod.com/portals/profile/8e90e84a-3189-4ea0-845d-77792d8dea57
+    description: Find finished prints.
+    icon: bag
+    enabled: true
+    homepage: true
+    order: 20
+
+  - slug: print
+    label: Printables
+    destination: https://www.printables.com/@bmatic
+    description: Find files to print yourself.
+    icon: printer
+    enabled: true
+    homepage: true
+    order: 30
+
+  - slug: instagram
+    label: Instagram
+    destination: # REQUIRED: exact BMatic Instagram profile URL
+    icon: instagram
+    enabled: false
+    homepage: true
+    order: 40
+
+  - slug: main
+    label: BMatic Website
+    destination: https://bmatic.xyz/
+    icon: globe
+    enabled: true
+    homepage: false
+    order: 50
